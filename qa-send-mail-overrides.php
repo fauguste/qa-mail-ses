@@ -8,8 +8,9 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 function qa_send_email($params)
 {
-    require_once QA_INCLUDE_DIR.'vendor/aws.phar';
-    
+
+    include QA_INCLUDE_DIR.'vendor/aws.phar';
+
     $client = Aws\Ses\SesClient::factory(array(
             'region'  => (string)qa_opt('plugin_mail_ses_region'),
             'secret'  => (string)qa_opt('plugin_mail_ses_secret'),
@@ -38,6 +39,6 @@ function qa_send_email($params)
         $result = $client->sendEmail($param);
     }
     catch(Exception $e) {
-        
+
     }
 }
