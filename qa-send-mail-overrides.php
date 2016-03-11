@@ -12,9 +12,12 @@ function qa_send_email($params)
     include QA_INCLUDE_DIR.'vendor/aws.phar';
 
     $client = Aws\Ses\SesClient::factory(array(
+    	    'version' => 'latest',
             'region'  => (string)qa_opt('plugin_mail_ses_region'),
-            'secret'  => (string)qa_opt('plugin_mail_ses_secret'),
-            'key'  => (string)qa_opt('plugin_mail_ses_key'),
+            'credentials' => array(
+                'secret'  => (string)qa_opt('plugin_mail_ses_secret'),
+                'key'  => (string)qa_opt('plugin_mail_ses_key'),
+            )
     ));
     $param = array();
     $param['Source'] =  '=?utf-8?B?' . base64_encode($params['fromname']) . '?= <' . $params['fromemail'] . '>';
@@ -37,6 +40,7 @@ function qa_send_email($params)
     );
     try {
         $result = $client->sendEmail($param);
+        return $result;
     }
     catch(Exception $e) {
 
